@@ -60,20 +60,28 @@ def student_info (id: int) -> dict:
             return student
 
 
-
-def student_analysis (student_list, name):
+"""
+Analyzes the list of students
+Returns:
+ - None if there are no students
+ - student: dict with specified name. 
+ If there are more than one student with specified name the another prompt for ID is shown
+"""
+def student_analysis (student_list, name) -> dict | None:
+    student=None
     if len(student_list) == 0:
         print(f"There is no student with name: {name}")
     elif len(student_list) == 1:
         student = student_info(student_list[0]['id'])
-        print(f"Id: {student['id']},\n Name: {student['name']},\n Marks: {student['marks']},\n Info: {student['info']}\n ")
+        # print(f"Id: {student['id']},\n Name: {student['name']},\n Marks: {student['marks']},\n Info: {student['info']}\n ")
     else:
         print(f"There are {len(student_list)} wiht name {name} found:")
         for student in student_list:
             print(f" ID: {student['id']}, Name: {student['name']}, Marks: {student['marks']} ")
         id_input=input("Please, specify the student's ID: ")
         student = student_info(int(id_input))
-        print(f"Id: {student['id']},\n Name: {student['name']},\n Marks: {student['marks']},\n Info: {student['info']}\n ")
+        # print(f"Id: {student['id']},\n Name: {student['name']},\n Marks: {student['marks']},\n Info: {student['info']}\n ")
+    return student
 
 def get_next_id () -> int:
     max_id = 0
@@ -110,7 +118,8 @@ def main():
             elif user_input == "retrieve":
                 student_name = input("Input student name you are looking for:")
                 requested_students=find_students(student_name)
-                student_analysis(requested_students, student_name)
+                student = student_analysis(requested_students, student_name)
+                print(f"Id: {student['id']},\n Name: {student['name']},\n Marks: {student['marks']},\n Info: {student['info']}\n ")
             elif user_input == "add":
                 student_name = input("Input student name you are going to add:")
                 add_student(student_name, None)

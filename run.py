@@ -1,19 +1,24 @@
 import time
 import logging
+import social_channels
+from social import Post, process_schedule
 
-class TimerContext:
-    def __enter__(self):
-        self.cotext_start = time.time_ns()
+def main():
+    posts = []
+    for i in range(10):
+        if i % 3 != 0:
+            posts.append(Post(f"Message-{i}", time.time()))
+        else:
+            posts.append(Post(f"Message-{i}", time.time() + i ))
+    channels = [
+        social_channels.get_channel("youtube"),
+        social_channels.get_channel("twitter"),
+    ]
+    process_schedule(posts, channels)
 
-    def __exit__(self, exc_type, exc_value, traceback):
-        context_end = time.time_ns()
-        delta_time =  context_end - self.cotext_start
-        logging.info(f"Execution time {delta_time} ns" )
 
-# Set up logging configuration
 logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s")
 
-with TimerContext():
-    time.sleep(2)
+main()
 
 
